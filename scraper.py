@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 import requests
 import json
+from bs4 import BeautifulSoup
 
 INSPECTION_DOMAIN_NAME = b'http://info.kingcounty.gov'
 INSPECTION_PATH = b'/health/ehs/foodsafety/inspections/Results.aspx'
@@ -38,6 +39,11 @@ def load_inspection_page():
     with open('output.json') as data_file:
         output = json.load(data_file)
     return output
+
+
+def parse_source(html, encoding='utf-8'):
+    parsed = BeautifulSoup(html, 'html5lib', from_encoding=encoding)
+    return parsed
 
 
 if __name__ == "__main__":
