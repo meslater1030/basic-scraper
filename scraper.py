@@ -54,10 +54,18 @@ def extract_data_listings(html):
     return html.findall('div', id=id_finder)
 
 
-if __name__ == "__main__":
-    for arg in sys.argv:
-        if arg == "test":
-            load_inspection_page()
-            print 'test'
-        else:
-            get_inspection_page(Zip_Code=98121)
+if __name__ == '__main__':
+    kwargs = {
+        'Inspection_Start': '2/1/2013',
+        'Inspection_End': '2/1/2015',
+        'Zip_Code': '98109'
+    }
+    if len(sys.argv) > 1 and sys.argv[1] == 'test':
+        html, encoding = load_inspection_page()
+    else:
+        html, encoding = get_inspection_page(**kwargs)
+    import pdb; pdb.set_trace()
+    doc = parse_source(html, encoding)
+    listings = extract_data_listings(doc)
+    print len(listings)
+    print listings[0].prettify()
