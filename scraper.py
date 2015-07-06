@@ -3,6 +3,9 @@ from __future__ import unicode_literals
 import requests
 import json
 from bs4 import BeautifulSoup
+import sys
+import re
+
 
 INSPECTION_DOMAIN_NAME = b'http://info.kingcounty.gov'
 INSPECTION_PATH = b'/health/ehs/foodsafety/inspections/Results.aspx'
@@ -46,6 +49,15 @@ def parse_source(html, encoding='utf-8'):
     return parsed
 
 
+def extract_data_listings(html):
+    id_finder = re.complie(r'PR[\d]+~')
+    return html.findall('div', id=id_finder)
+
+
 if __name__ == "__main__":
-    output = get_inspection_page(Zip_Code=98121)
-    print output
+    for arg in sys.argv:
+        if arg == "test":
+            load_inspection_page()
+            print 'test'
+        else:
+            get_inspection_page(Zip_Code=98121)
