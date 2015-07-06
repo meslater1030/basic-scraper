@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 import requests
+import json
 
 INSPECTION_DOMAIN_NAME = b'http://info.kingcounty.gov'
 INSPECTION_PATH = b'/health/ehs/foodsafety/inspections/Results.aspx'
@@ -34,8 +35,9 @@ def get_inspection_page(**kwargs):
 
 
 def load_inspection_page():
-    inspection_page = open('output.txt', 'w')
-    return inspection_page.read()
+    with open('output.json') as data_file:
+        output = json.load(data_file)
+    return output
 
 
 if __name__ == "__main__":
