@@ -41,7 +41,9 @@ def get_inspection_page(**kwargs):
 def load_inspection_page():
     with open('output.json') as data_file:
         output = json.load(data_file)
-    return output
+        content = output[0].encode('utf-8')
+        encoding = output[1].encode('utf-8')
+    return content, encoding
 
 
 def parse_source(html, encoding='utf-8'):
