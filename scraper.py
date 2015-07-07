@@ -127,7 +127,7 @@ if __name__ == '__main__':
         'Zip_Code': '98109'
     }
     if len(sys.argv) > 1 and sys.argv[1] == 'test':
-        html, encoding = load_inspection_page('inspection_page.html')
+        html, encoding = load_inspection_page()
     else:
         html, encoding = get_inspection_page(**kwargs)
     doc = parse_source(html, encoding)
