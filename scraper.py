@@ -3,9 +3,10 @@
 import requests
 import json
 from bs4 import BeautifulSoup
-import sys
 import re
 import geocoder
+import urllib3
+urllib3.disable_warnings()
 
 
 INSPECTION_DOMAIN_NAME = b'http://info.kingcounty.gov'
@@ -166,7 +167,22 @@ def get_geojson(result):
 
 if __name__ == '__main__':
     import pprint
-    test = len(sys.argv) > 1 and sys.argv[1] == 'test'
+    import argparse
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--test', help='run from test file',
+                        action='store_true')
+    parser.add_argument('--highscore', help='sort by high score',
+                        action='store_true')
+    parser.add_argument('--average', help='sort by average score',
+                        action='store_true')
+    parser.add_argument('--inspections', help='sort by most inspections',
+                        action='store_true')
+
+    args = parser.parse_args()
+    if args.test:
+        test = True
+    else:
+        test = False
     total_result = {'type': 'FeatureCollection', 'features': []}
     for result in generate_results(test):
         geo_result = get_geojson(result)
