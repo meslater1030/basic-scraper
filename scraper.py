@@ -136,7 +136,7 @@ def generate_results(test=False, count=10):
     for listing in listings[:count]:
         metadata = extract_restaurant_metadata(listing)
         score_data = extract_score_data(listing)
-        score_data.update(metadata)
+        metadata.update(score_data)
         yield metadata
 
 
