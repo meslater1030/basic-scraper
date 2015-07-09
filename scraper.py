@@ -165,6 +165,20 @@ def get_geojson(result):
     return geojson
 
 
+def sort_values(total_result, sort_type, reverse=False):
+    if reverse:
+        total_result['features'] = sorted(total_result['features'],
+                                          key=lambda restaurant:
+                                          restaurant['properties']
+                                          [sort_type], reverse=True)
+    else:
+        total_result['features'] = sorted(total_result['features'],
+                                          key=lambda restaurant:
+                                          restaurant['properties']
+                                          [sort_type])
+    return total_result
+
+
 if __name__ == '__main__':
     import pprint
     import argparse
@@ -177,16 +191,30 @@ if __name__ == '__main__':
                         action='store_true')
     parser.add_argument('--inspections', help='sort by most inspections',
                         action='store_true')
+    parser.add_argument('--reverse', help='reverse the sort',
+                        action='store_true')
 
     args = parser.parse_args()
+    sort_type = None
+    reverse = False
     if args.test:
         test = True
     else:
         test = False
+    if args.average:
+        sort_type = 'Average Score'
+    if args.highscore:
+        sort_type = 'High Score'
+    if args.inspections:
+        sort_type = 'Total Inspections'
+    if args.reverse:
+        reverse = True
     total_result = {'type': 'FeatureCollection', 'features': []}
     for result in generate_results(test):
         geo_result = get_geojson(result)
         pprint.pprint(geo_result)
         total_result['features'].append(geo_result)
+    if sort_type is not None:
+        total_result = sort_values(total_result, sort_type, reverse)
     with open('my_map.json', 'w') as fh:
         json.dump(total_result, fh)
